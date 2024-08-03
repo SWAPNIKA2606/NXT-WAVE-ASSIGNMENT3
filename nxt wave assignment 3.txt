@@ -1,0 +1,78 @@
+// Property.tsx
+import React from 'react';
+
+interface PropertyProps {
+  id: number;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+}
+
+const Property: React.FC<PropertyProps> = ({
+  id,
+  title,
+  description,
+  price,
+  images,
+}) => {
+  return (
+    <div className="property">
+      <h2>{title}</h2>
+      <p>{description}</p>
+      <p>Price: ${price}</p>
+      <div className="images">
+        {images.map((image, index) => (
+          <img src={image} alt={title} key={index} />
+        ))}
+      </div>
+      <button className="book-now">Book Now</button>
+    </div>
+  );
+};
+
+export default Property;
+
+// BookingCart.tsx
+import React, { useState, useEffect } from 'react';
+
+interface BookingCartProps {
+  bookings: Booking[];
+}
+
+const BookingCart: React.FC<BookingCartProps> = ({ bookings }) => {
+  const [cartTotal, setCartTotal] = useState(0);
+  const [bookingCount, setBookingCount] = useState(0);
+
+  useEffect(() => {
+    const calculateCartTotal = () => {
+      const total = bookings.reduce((acc, booking) => acc + booking.price, 0);
+      setCartTotal(total);
+    };
+
+    const calculateBookingCount = () => {
+      setBookingCount(bookings.length);
+    };
+
+    calculateCartTotal();
+    calculateBookingCount();
+  }, [bookings]);
+
+  return (
+    <div className="booking-cart">
+      <h2>Booking Cart</h2>
+      <p>Cart Total: ${cartTotal}</p>
+      <p>Booking Count: {bookingCount}</p>
+      <ul>
+        {bookings.map((booking, index) => (
+          <li key={index}>
+            <span>{booking.title}</span>
+            <span>${booking.price}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default BookingCart;
